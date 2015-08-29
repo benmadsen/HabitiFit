@@ -1,4 +1,4 @@
-### FitBitica
+# FitBitica
 
 A one-page Javascript and PHP powered application to update Habitica using FitBit data!  It's the perfect match!
 
