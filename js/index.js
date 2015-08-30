@@ -27,9 +27,16 @@ $(document).ready(function() {
     //check to see if we have fitbit auth data before we execute
    if(localStorage.scope && localStorage.user_id && localStorage.token_type && localStorage.auth_token){
        //Set activity variables
-       localStorage.steps_taken = 0;
-       localStorage.calories_burned = 0;
-       localStorage.miles_walked = 0;
+       if(!(localStorage.steps_taken && localStorage.calories_burned && localStorage.miles_walked)){
+           localStorage.steps_taken = 0;
+           localStorage.calories_burned = 0;
+           localStorage.miles_walked = 0;
+       }
+       
+       //update fitbit user data
+        $('#steps').html(localStorage.steps_taken);
+        $('#calories').html(localStorage.calories_burned);
+        $('#miles').html(localStorage.miles_walked);
        
        //setup habit tracking variables
        if(!localStorage.track){
@@ -45,48 +52,84 @@ $(document).ready(function() {
        $('#get-data').click(function(){
            get_data();
        });
+       
+       $('#logout').click(function(){
+           r = confirm("Are you sure you want to reset? You shouldn't log in again until next cron");
+            if (r == true) {
+                localStorage.clear();
+            }
+       });
 
         $("#habitica_info_submit").click(function( event ) {
-          if($('#user_id').val()){
+          if($('#user_id').val() && localStorage.hab_user_id != $('#user_id').val() && $('#api_token').val() && localStorage.hab_api_tok != $('#api_token').val()){
               localStorage.hab_user_id  = $('#user_id').val();
-          }
-          if($('#api_token').val()){
               localStorage.hab_api_tok = $('#api_token').val();
+              
+              hab_params = {user_id: localStorage.hab_user_id, api_tok: localStorage.hab_api_tok};
+              localStorage.hab_stats = habitica_do(hab_params,"get_stats");
+              user_stats = JSON.parse(localStorage.hab_stats);
+              
+              console.log(user_stats);
+              
+              if(user_stats.error){
+                  $('#hab_output').html(user_stats.error);
+                  $('#hab_output').fadeIn();
+                  $('#hab_output').fadeOut(5000);
+              }else{
+                  update_habitica_html(user_stats);
+                  
+                  $('#hab_output').html('api info updated');
+                  $('#hab_output').fadeIn();
+                  $('#hab_output').fadeOut(5000);
+                  
+              }
+          }else{
+              $('#hab_output').html('please fill out both fields with unique info!');
+              $('#hab_output').fadeIn();
+              $('#hab_output').fadeOut(5000);
           }
-          if($('#task_name').val()){
-              localStorage.task_name = $('#task_name').val();
-          }
-            
-          $('#hab_output').html('api info updated');
-          $('#hab_output').fadeIn();
-          $('#hab_output').fadeOut(4000);
-
+          
           event.preventDefault();
         });
+
        
        //if tasks update is updated
        $("#update_submit").click(function(event){
           track = JSON.parse(localStorage.track); 
           track_bool = JSON.parse(localStorage.track_bool);
-          track.cal, track.mile, track.step = 0;
-          track_bool.cal, track_bool.mile,track_bool.step = false;
+    
+          //double check times updated values 
+           times_up = JSON.parse(localStorage.times_updated);
+           old_values = [track.cal, track.mile, track.step];
            
-          if($("#track_calories").is(':checked') && $("#calories_value").val()){
+          track.cal, track.mile, track.step = 0;
+          track_bool.cal, track_bool.mile,track_bool.step = false
+          
+          if($("#track_calories").is(':checked') && isInt($("#calories_value").val())){
              track.cal =  $("#calories_value").val();
              track_bool.cal = true;
+              times_up.cal = Math.floor((times_up.cal * old_values[0])/track.cal);
           }
            
-          if($("#track_steps").is(':checked') && $("#steps_value").val() ){
+          if($("#track_steps").is(':checked') && isInt($("#steps_value").val()) ){
               track.step = $("#steps_value").val();
               track_bool.step = true;
+              times_up.step = Math.floor((times_up.step * old_values[2])/track.step);
           }
            
-          if($("#track_miles").is(':checked') && $("#miles_value").val()){
+          if($("#track_miles").is(':checked') && isInt($("#miles_value").val())){
               track.mile = $("#miles_value").val();
               track_bool.mile = true;
+              times_up.mile = Math.floor((times_up.mile * old_values[1])/track.mile);
           }
+           
            localStorage.track = JSON.stringify(track);
            localStorage.track_bool = JSON.stringify(track_bool);
+           localStorage.times_updated = JSON.stringify(times_up);
+           
+           $('#up_output').html('fields updated');
+           $('#up_output').fadeIn();
+           $('#up_output').fadeOut(5000);
            
            reset_checkboxes();
            
@@ -95,10 +138,15 @@ $(document).ready(function() {
 
        reset_checkboxes();
        
+       if(localStorage.hab_stats && !JSON.parse(localStorage.hab_stats).error){
+           update_habitica_html(JSON.parse(localStorage.hab_stats));
+       }
+       
        //initialize some variables it they aren't already
        if(!localStorage.times_updated){
-           localStorage.times_updated = 0;
+           localStorage.times_updated = JSON.stringify({cal: 0, mile: 0, step: 0});
        }
+       
        if(!localStorage.today_date){
             localStorage.today_date = get_today_date();   
        }
@@ -109,7 +157,7 @@ $(document).ready(function() {
            localStorage.today_date = localStorage.fetch_date;
            console.log("It's a new day!");
            //reset counters
-           localStorage.times_updated=0;
+           localStorage.times_updated = JSON.stringify({cal: 0, mile: 0, step: 0});
        }
        
        window.setInterval(function(){
@@ -137,24 +185,59 @@ $(document).ready(function() {
                     localStorage.miles_walked = item.distance;
                 }
             });
+            
+            times_up = JSON.parse(localStorage.times_updated);
+            track = JSON.parse(localStorage.track);
+            track_bool = JSON.parse(localStorage.track_bool);
+            
+            $.each(track_bool, function(k, v) {
+                if(v){
+                    upper = 0;
+                    lower = parseInt(track[k]);
+                    track_name = "";
 
-            times = Math.floor(localStorage.steps_taken/500);
-            if(times > localStorage.times_updated){
-                if(localStorage.hab_user_id && localStorage.hab_api_tok){
-                    diff = times - localStorage.times_updated;
-                    for(i = 0; i< diff; i++){
-                         if(update_habitica_task(localStorage.task_name, 'up', localStorage.hab_user_id, localStorage.hab_api_tok)){
-                            localStorage.times_updated = times;
-                         }
+                    if(k=='cal'){
+                        upper = parseInt(localStorage.calories_burned);
+                        track_name = lower + " calories burned";
+                    }else if(k == 'step'){
+                        upper = parseInt(localStorage.steps_taken);
+                        track_name = lower + " steps taken";
+                    }else if(k == 'mile'){
+                        upper = parseInt(localStorage.miles_walked); 
+                        track_name = lower + " miles traveled";
                     }
-
-                }else{
-                    $('#hab_output').html('please add habitica info');
-                    $('#hab_output').fadeIn();
-                    $('#hab_output').fadeOut(4000);
+                    
+                    times = Math.floor(upper/lower);
+                    if(times > times_up[k]){
+                        if(localStorage.hab_user_id && localStorage.hab_api_tok){
+                            diff = times - times_up[k];
+                            console.log(times);
+                            for(i = 0; i< diff; i++){
+                                hab_params = {task_name: track_name, direction: 'up', user_id: localStorage.hab_user_id, api_tok: localStorage.hab_api_tok};
+                                 if(habitica_do(hab_params, "change_habit")){
+                                     change = JSON.parse(localStorage.times_updated);
+                                     change[k] = times;
+                                     localStorage.times_updated = JSON.stringify(change);
+                                 }else{
+                                    $('#hab_output').html('No task found with that name!');
+                                    $('#hab_output').fadeIn();
+                                    $('#hab_output').fadeOut(4000);
+                                 }
+                            }
+                            //update habitica user data
+                            hab_params = {user_id: localStorage.hab_user_id, api_tok: localStorage.hab_api_tok};
+                            localStorage.hab_stats = habitica_do(hab_params,"get_stats");
+                            update_habitica_html(JSON.parse(localStorage.hab_stats));
+                        }else{
+                            $('#hab_output').html('please add habitica info');
+                            $('#hab_output').fadeIn();
+                            $('#hab_output').fadeOut(4000);
+                        }
+                    }
                 }
-            }
-
+            });
+            
+            //update fitbit user data
             $('#steps').html(localStorage.steps_taken);
             $('#calories').html(localStorage.calories_burned);
             $('#miles').html(localStorage.miles_walked);
@@ -164,27 +247,30 @@ $(document).ready(function() {
     
     //
     // Updates habitica habit
+    // Object params depends on type of action. Currently two actions supported: "change_habit" | "get_stats"
+    // change_habit required variables: task_name (string), direction ('up' | 'down'), user_id (string), api_tok (string) 
+    // get_stats required variables: user_id (string), api_tok (string) 
     //
 
-    function update_habitica_task(task_name, direction, uid, tok){
+    function habitica_do(params, action){
        return_val = false;
        $.ajax({
         url:'habit_data.php',
-        data: {task_name: task_name, direction: direction, user_id: uid, api_tok: tok},
+        data:{data_params: params, action: action},
         async: false,
         success: function(data){
+            
             if(data == 'ERROR'){
                return_val = false;
-                $('#hab_output').html('Could not update habitica data!');
-                $('#hab_output').fadeIn();
-                $('#hab_output').fadeOut(4000);
+            }else{
+                return_val = data;
             }
-
             $('#user_id').val('');
             $('#api_token').val('');
-            return_val = true;
+                
         }
        });
+        
        return return_val;
     }
 
@@ -200,11 +286,28 @@ $(document).ready(function() {
        }
        if(JSON.parse(localStorage.track)){
            track = JSON.parse(localStorage.track);
-               $("#calories_value").attr("placeholder", (track.cal) ? track.cal : "").val("").focus().blur();
-               $("#steps_value").attr("placeholder", (track.step) ? track.step : "").val("").focus().blur();
-               $("#miles_value").attr("placeholder", (track.mile) ? track.mile : "").val("").focus().blur();
+               $("#calories_value").val((track.cal) ? track.cal : "");
+               $("#steps_value").val((track.step) ? track.step : "")
+               $("#miles_value").val((track.mile) ? track.mile : "")
        }
    }
+    
+    //
+    // Updates html fields for habitica data
+    //
+    
+    function update_habitica_html(user_stats){
+        $('#hab_name').html(user_stats.habitRPGData.profile.name);
+        $('#hab_class').html(user_stats.habitRPGData.stats.class);
+        $('#hab_level').html(user_stats.habitRPGData.stats.lvl);
+        
+        $('#hab_name').fadeIn();
+        $('#hab_class').fadeIn();
+        $('#hab_level').fadeIn();
+        
+          $('#hab_xp_bar').css("width",(user_stats.habitRPGData.stats.exp/user_stats.habitRPGData.stats.toNextLevel)*100 + "%");
+        $('#hab_xp_prog').html(user_stats.habitRPGData.stats.exp + "/" + user_stats.habitRPGData.stats.toNextLevel);
+    }
     
     //
     // Gets today's date in the form of yyyy/mm/dd
@@ -225,5 +328,9 @@ $(document).ready(function() {
 
         today = yyyy+'-'+mm+'-'+dd
         return today;
+    }
+    
+    function isInt(n) {
+       return n % 1 === 0;
     }
 });

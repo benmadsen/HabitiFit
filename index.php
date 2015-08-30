@@ -14,27 +14,28 @@
         <nav class="navbar navbar-inverse navbar-static-top">
           <div class="container-fluid">
             <div class="navbar-header">
-              <a class="navbar-brand" href="#">FitBitica</a>
+              <h1 class="navbar-brand">FitBitica</h1>
             </div>
           </div>
         </nav>
       
       <div class="container">
           <div class="row">
-              <a href="https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=229TR9&scope=activity&prompt=none">Click Me!</a>
-                <br><br>
-                <a class="btn btn-default" id="get-data">Get data</a>
+              <a href="https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=229TR9&scope=activity&prompt=none" class="btn btn-primary center-block">Authenticate with FitBit</a>
+            <br><br>
           </div>
       </div>
       
        <div class="container" id="main_view">
            <div class="row">
               <div class="col-md-4 fitbit-color">
+               <a class="btn btn-default" id="get-data">Refresh Fitbit Data</a><br>
                 <br>
-                <p>Steps Today: <span id="steps"></span></p>
-                 <p >Calories Out Today: <span id="calories"></span></p>
-                  <p>Miles Walked Today: <span id="miles"></span></p>
+                <h4>Steps Today: <span id="steps"></span></h4>
+                 <h4>Calories Out Today: <span id="calories"></span></h4>
+                  <h4>Miles Walked Today: <span id="miles"></span></h4>
                   <br>
+                  <a href="/" class="btn btn-danger" id="logout">Reset All Data (logout)</a><br>
               </div>
               
               <div class="col-md-4 center-block">
@@ -71,6 +72,9 @@
                       
                       <h5 class="btn btn-default" id="update_submit">Submit</h5>
                     </div>
+                    <br>
+                    <h3 id="up_output" style="display:none"></h3>
+                    <br>
               </div> 
               
               <div class="col-md-4 habit-color">
@@ -81,13 +85,27 @@
                        <br>
                        <label class="control-label">Api Token</label>
                       <input class="form-control" name="searchTxt" type="password" id="api_token"/><br>
-                        <label class="control-label">Habit Name To Update</label>
-                       <input class="form-control" type="text" id="task_name"/>
                       <h5 class="btn btn-default" id="habitica_info_submit">Submit</h5>
                       <br>
-                      <h3 id="hab_output" style="display:none"></h3>
                   </div>
+                  <h3 id="hab_output" style="display:none"></h3>
+                  <br><br>
+                  <div class="hab_stats">
+                      <h2>Habitica Stats:</h2>
+                      <h4 >User: <span id="hab_name"></span></h4>
+                      <h4 >Class: <span id="hab_class"></span></h4>
+                      <h4 >Level: <span id="hab_level"></span></h4>
+                      
+                      <h4>XP:</h4>
+                      <div class="progress">
+                          <div id="hab_xp_bar" class="progress-bar" role="progressbar" style="width: 20%;">
+                            <span id="hab_xp_prog"></span>
+                          </div>
+                      </div>
+                  </div>
+                  
               </div>
+              
               
                            
            </div>

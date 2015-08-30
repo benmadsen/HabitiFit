@@ -1,19 +1,26 @@
 <?php
 require_once('habitica/habitica_api.php');
 
-$dir = $_GET['direction'];
-$taskName = $_GET['task_name'];
-$user_id = $_GET['user_id'];
-$api_tok = $_GET['api_tok'];
+$params = $_GET['data_params'];
+$action = $_GET['action'];
+$user_id = $params['user_id'];
+$api_tok = $params['api_tok'];
 
 $habit = new Habitica($user_id, $api_tok);
-$task_id = $habit->getTaskId($taskName);
 
-if(($task_id != 'No task found with that name') && ($dir == 'up' || $dir == 'down') ){
-    $params = array('taskId'=>$task_id,'direction'=>$dir);
-    $rval = $habit->taskScoring($params);
-    echo print_r($rval);
-}else{
- echo 'ERROR';   
+if($action == 'change_habit'){
+    $dir = $params['direction'];
+    $taskName = $params['task_name'];
+    $task_id = $habit->getTaskId($taskName);
+    
+    if(($task_id != 'No task found with that name') && ($dir == 'up' || $dir == 'down')){
+        $params = array('taskId'=>$task_id,'direction'=>$dir);
+        $rval = $habit->taskScoring($params);
+        echo json_encode($rval);
+    }else{
+     echo 'ERROR';   
+    }
+}else if($action == 'get_stats'){
+    echo json_encode($habit->userStats());
 }
 ?>
