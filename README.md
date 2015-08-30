@@ -9,9 +9,9 @@ FitBitica uses the PHP wrapper for Habitica's API V2 (https://github.com/Lamikin
 
 ## ESSENTIAL TO-DO's
 
-- Add bootstrap and custom css
-- Reformat UI
 - Add ability to customize update requirements (currently 500 fitbit steps)
+- Error handling!
+- Handling fitbit auth token expiration
 
 
 ## FUTURE TO-DO's
