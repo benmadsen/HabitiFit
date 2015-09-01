@@ -31,6 +31,7 @@
              </ol>
              <hr>
           </div>
+
           <br>
           <div class="row">
                   <a href="https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=229TR9&scope=activity&prompt=none" class="btn btn-primary center-block">Authenticate with FitBit</a>
