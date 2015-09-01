@@ -191,6 +191,17 @@ $(document).ready(function() {
             track_bool = JSON.parse(localStorage.track_bool);
             
             $.each(track_bool, function(k, v) {
+                //check date every time this function is called
+                localStorage.fetch_date = get_today_date();
+       
+               if(new Date(localStorage.fetch_date).getTime() > new Date(localStorage.today_date).getTime()){
+                   localStorage.today_date = localStorage.fetch_date;
+                   console.log("It's a new day!");
+                   //reset counters
+                   localStorage.times_updated = JSON.stringify({cal: 0, mile: 0, step: 0});
+               }
+                
+                
                 if(v){
                     upper = 0;
                     lower = parseInt(track[k]);
