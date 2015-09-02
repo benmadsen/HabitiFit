@@ -7,7 +7,7 @@ $(document).ready(function() {
    //TO ADD:  Check to see if Fitbit auth token has expired to present a new auth form!
    //TO ADD: error handling!
     
-    
+    window.location.href = "http://habitifit.herokuapp.com/";
    //Google analytics
     
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -172,8 +172,7 @@ $(document).ready(function() {
        
        window.setInterval(function(){
            //reload the page instead of just refreshing it, so that users can use the most updated version of the app
-           //location.reload(true);
-           window.location.href = "http://habitifit.herokuapp.com/";
+           location.reload(true);
            //ga('send', 'pageview', '/auto-refresh');
            //get_data();
         }, 180000)
