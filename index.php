@@ -42,6 +42,10 @@
                 <br>
                 <h3 class="text-center">Please report bugs or feature requests <a href="https://github.com/Lamikins/FitBitica/issues" target="_blank">here!</a></h3>
                 <br>
+                <div class="alert alert-danger alert-dismissible" style="display:none;" id="auth_error" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      Your FitBit access code has expired.  Please re-authenticate.  Note: This is not a valid logout
+                </div>
                 <hr>
           </div>
       </div>
