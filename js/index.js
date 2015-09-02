@@ -70,7 +70,7 @@ $(document).ready(function() {
        });
 
         $("#habitica_info_submit").click(function( event ) {
-          if($('#user_id').val() && localStorage.hab_user_id != $('#user_id').val() && $('#api_token').val() && localStorage.hab_api_tok != $('#api_token').val()){
+          if($('#user_id').val() && $('#api_token').val()){
               localStorage.hab_user_id  = $('#user_id').val();
               localStorage.hab_api_tok = $('#api_token').val();
               
@@ -93,7 +93,7 @@ $(document).ready(function() {
                   
               }
           }else{
-              $('#hab_output').html('please fill out both fields with unique info!');
+              $('#hab_output').html('please fill out both fields!');
               $('#hab_output').fadeIn();
               $('#hab_output').fadeOut(5000);
           }
