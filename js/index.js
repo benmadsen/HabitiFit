@@ -172,7 +172,8 @@ $(document).ready(function() {
        
        window.setInterval(function(){
            //reload the page instead of just refreshing it, so that users can use the most updated version of the app
-           location.reload(true);
+           //location.reload(true);
+           window.location.href = "http://habitifit.herokuapp.com/";
            //ga('send', 'pageview', '/auto-refresh');
            //get_data();
         }, 180000)

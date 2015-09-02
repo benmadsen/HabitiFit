@@ -23,6 +23,11 @@
       <div class="container">
         
          <div class="row">
+             <div class="alert alert-success alert-dismissible" id="auth_error" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      FitBitica is now known as HabitiFit!  Welcome!
+                </div>
+                
               <h2>How to Use:</h2>
               
               <ol>
