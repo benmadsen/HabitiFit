@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>FitBitica-2.2</title>
+        <title>FitBitica-2.5</title>
        <script src="js/jquery-2.1.4.min.js"></script>
        <script src="js/bootstrap.min.js"></script>
         <script src="js/index.js"></script>

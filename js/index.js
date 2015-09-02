@@ -191,7 +191,7 @@ $(document).ready(function() {
         success: function(data){
             console.log(data);
             //make sure there are no errors
-            if(data.errors[0]){
+            if(data.errors && data.errors[0]){
                 //since we're using implicit grant authorization flow, we cannot refresh the token.  User must reauthenticate.
                  $("#auth_error").css("display","block");
                  $("#main_view").css("display","none");
