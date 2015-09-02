@@ -16,7 +16,7 @@ $(document).ready(function() {
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
       ga('create', 'UA-52252320-3', 'auto');
-      ga('send', 'pageview');
+      ga('send', 'pageview','/index.php');
     
    //If window has hash, it means we've got some FitBit api data to crunch!
    if(window.location.hash){
@@ -43,10 +43,8 @@ $(document).ready(function() {
            localStorage.miles_walked = 0;
        }
        
-       //update fitbit user data
-        $('#steps').html(localStorage.steps_taken);
-        $('#calories').html(localStorage.calories_burned);
-        $('#miles').html(localStorage.miles_walked);
+       //try to get data
+       get_data();
        
        //setup habit tracking variables
        if(!localStorage.track){
@@ -173,8 +171,10 @@ $(document).ready(function() {
        }
        
        window.setInterval(function(){
-           ga('send', 'pageview', '/auto-refresh');
-           get_data();
+           //reload the page instead of just refreshing it, so that users can use the most updated version of the app
+           location.reload(true);
+           //ga('send', 'pageview', '/auto-refresh');
+           //get_data();
         }, 180000)
        
    }else{
