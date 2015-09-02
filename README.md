@@ -7,6 +7,8 @@ FitBitica uses the PHP wrapper for Habitica's API V2 (https://github.com/Lamikin
 
 ## TO-DO's
 
-- Better error handling
 - Handling fitbit auth token expiration
 - Add push notifications
+- Add more FitBit metrics
+- Add negative habit support
+- Add dailies/todos support

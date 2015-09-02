@@ -24,12 +24,15 @@
         
          <div class="row">
               <h2>How to Use:</h2>
+              
               <ol>
                  <li class="med-font"> Authenticate with FitBit, then fill in your habitica api data (press submit)!</li>
                  <li class="med-font">  Pick the metrics you'd like to use and fill in their values.  Press submit.  </li>
                  <li class="med-font">Go into habitica and create a habit with a name identical to the field you filled out. Repeat for multiple metrics</li>
                  <li class="med-font"> That's it! Every three or so minutes, the page will automatically poll FitBit's api and update your habitica profile according to your metrics!</li>
+                 <h4 >In-depth instructions can be found  <a href="https://github.com/Lamikins/FitBitica/wiki" target="_blank">on the wiki</a></h4>
              </ol>
+             
              <hr>
           </div>
 
