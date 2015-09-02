@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>FitBitica-2.5</title>
+        <title>HabitiFit-2.5</title>
        <script src="js/jquery-2.1.4.min.js"></script>
        <script src="js/bootstrap.min.js"></script>
         <script src="js/index.js"></script>
@@ -15,7 +15,7 @@
         <nav class="navbar navbar-inverse navbar-static-top">
           <div class="container-fluid">
             <div class="navbar-header">
-              <h1 class="navbar-brand">FitBitica</h1>
+              <h1 class="navbar-brand">HabitiFit</h1>
             </div>
           </div>
         </nav>
@@ -30,7 +30,7 @@
                  <li class="med-font">  Pick the metrics you'd like to use and fill in their values.  Press submit.  </li>
                  <li class="med-font">Go into habitica and create a habit with a name identical to the field you filled out. Repeat for multiple metrics</li>
                  <li class="med-font"> That's it! Every three or so minutes, the page will automatically poll FitBit's api and update your habitica profile according to your metrics!</li>
-                 <h4 >In-depth instructions can be found  <a href="https://github.com/Lamikins/FitBitica/wiki" target="_blank">on the wiki</a></h4>
+                 <h4 >In-depth instructions can be found  <a href="https://github.com/Lamikins/HabitiFit/wiki" target="_blank">on the wiki</a></h4>
              </ol>
              
              <hr>
@@ -40,7 +40,7 @@
           <div class="row">
                   <a href="https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=229TR9&scope=activity&prompt=none" class="btn btn-primary center-block">Authenticate with FitBit</a>
                 <br>
-                <h3 class="text-center">Please report bugs or feature requests <a href="https://github.com/Lamikins/FitBitica/issues" target="_blank">here!</a></h3>
+                <h3 class="text-center">Please report bugs or feature requests <a href="https://github.com/Lamikins/HabitiFit/issues" target="_blank">here!</a></h3>
                 <br>
                 <div class="alert alert-danger alert-dismissible" style="display:none;" id="auth_error" role="alert">
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
