@@ -2,7 +2,7 @@
 	/*
      * ORIGINAL AUTHOR: RUDD FAWCETT
      * MODIFIED BY: DARIUS LAM
-     * COMPATIBLE WITH HABITICA API V2
+     * COMPATIBLE WITH HABITICA API V3
 	 */
 
 class Habitica{
@@ -18,7 +18,7 @@ class Habitica{
 
 		$this->userId = $userId;
 		$this->apiToken = $apiToken;
-		$this->apiURL = "https://habitica.com/api/v2/user";
+		$this->apiURL = "https://habitica.com/api/v3/user";
 		
 		if(!extension_loaded("cURL")) {
 			throw new Exception("This Habitica PHP API class requires cURL in order to work.");
@@ -82,7 +82,7 @@ class Habitica{
 	public function taskScoring($scoringParams) {
 		if(is_array($scoringParams)) {
 			if(!empty($scoringParams['taskId']) && !empty($scoringParams['direction'])) {
-				$scoringEndpoint="https://habitica.com/api/v2/user/tasks/".$scoringParams['taskId']."/".$scoringParams['direction'];
+				$scoringEndpoint="https://habitica.com/api/v3/user/tasks/".$scoringParams['taskId']."/".$scoringParams['direction'];
 				$scoringPostBody=array();
 				$scoringPostBody['apiToken']=$this->apiToken;
 				if(!empty($scoringParams['title'])) {

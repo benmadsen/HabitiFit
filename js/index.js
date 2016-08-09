@@ -187,7 +187,7 @@ $(document).ready(function() {
         data: {token_type : localStorage.token_type, access_token : localStorage.auth_token, user_id : localStorage.user_id, date: localStorage.today_date},
         async: false,
         success: function(data){
-            console.log(data);
+            //console.log(data);
             //make sure there are no errors
             if(data.errors && data.errors[0]){
                 //since we're using implicit grant authorization flow, we cannot refresh the token.  User must reauthenticate.
@@ -326,16 +326,16 @@ $(document).ready(function() {
     //
     
     function update_habitica_html(user_stats){
-        $('#hab_name').html(user_stats.habitRPGData.profile.name);
-        $('#hab_class').html(user_stats.habitRPGData.stats.class);
-        $('#hab_level').html(user_stats.habitRPGData.stats.lvl);
+        $('#hab_name').html(user_stats.habitRPGData.data.profile.name);
+        $('#hab_class').html(user_stats.habitRPGData.data.stats.class);
+        $('#hab_level').html(user_stats.habitRPGData.data.stats.lvl);
         
         $('#hab_name').fadeIn();
         $('#hab_class').fadeIn();
         $('#hab_level').fadeIn();
         
-          $('#hab_xp_bar').css("width",(user_stats.habitRPGData.stats.exp/user_stats.habitRPGData.stats.toNextLevel)*100 + "%");
-        $('#hab_xp_prog').html(user_stats.habitRPGData.stats.exp + "/" + user_stats.habitRPGData.stats.toNextLevel);
+          $('#hab_xp_bar').css("width",(user_stats.habitRPGData.data.stats.exp/user_stats.habitRPGData.data.stats.toNextLevel)*100 + "%");
+        $('#hab_xp_prog').html(user_stats.habitRPGData.data.stats.exp + "/" + user_stats.habitRPGData.data.stats.toNextLevel);
     }
     
     //

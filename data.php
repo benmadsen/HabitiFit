@@ -8,6 +8,7 @@ $curlArray = array(
         "Content-type: application/json",
         "Authorization: " . $_GET['token_type']. " " . $_GET['access_token']),
     CURLOPT_URL => "https://api.fitbit.com/1/user/". $_GET['user_id']."/activities/date/".$_GET['date'].".json");
+
 curl_setopt_array($curl, $curlArray);
 
 $resp = curl_exec($curl);
