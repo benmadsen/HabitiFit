@@ -19,20 +19,20 @@ $(document).ready(function() {
     
    //If window has hash, it means we've got some FitBit api data to crunch!
    if(window.location.hash){
-       url = window.location.hash.substr(1).split('&');
-       re = /=.*/;
-       var data = [];
-       url.forEach(function(item){
+        url = window.location.hash.substr(1).split('&');
+        re = /=.*/;
+        var data = [];
+        url.forEach(function(item){
            data.push(re.exec(item).toString().substr(1));
-       });
-
+        });
+       
        //Get authentication data
-       localStorage.scope = data[0];
+       localStorage.scope = data[2];
        localStorage.user_id= data[1];
-       localStorage.token_type = data[2];
-       localStorage.auth_token = data[4];
+       localStorage.token_type = data[3];
+       localStorage.auth_token = data[0];
+       
    }
-    
     //check to see if we have fitbit auth data before we execute
    if(localStorage.scope && localStorage.user_id && localStorage.token_type && localStorage.auth_token){
        //Set activity variables
@@ -179,7 +179,6 @@ $(document).ready(function() {
    }else{
        $("#main_view").css("display","none");
    }
-    
     
     function get_data(){
        $.ajax({
