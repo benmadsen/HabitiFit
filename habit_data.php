@@ -18,7 +18,7 @@ if($action == 'change_habit'){
         $rval = $habit->taskScoring($params);
         echo json_encode($rval);
     }else{
-     echo 'ERROR';   
+        echo 'ERROR';   
     }
 }else if($action == 'get_stats'){
     echo json_encode($habit->userStats());

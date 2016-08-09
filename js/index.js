@@ -187,7 +187,6 @@ $(document).ready(function() {
         data: {token_type : localStorage.token_type, access_token : localStorage.auth_token, user_id : localStorage.user_id, date: localStorage.today_date},
         async: false,
         success: function(data){
-            //console.log(data);
             //make sure there are no errors
             if(data.errors && data.errors[0]){
                 //since we're using implicit grant authorization flow, we cannot refresh the token.  User must reauthenticate.
@@ -288,7 +287,6 @@ $(document).ready(function() {
         data:{data_params: params, action: action},
         async: false,
         success: function(data){
-            
             if(data == 'ERROR'){
                return_val = false;
             }else{
